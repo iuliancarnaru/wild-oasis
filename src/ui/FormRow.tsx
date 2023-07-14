@@ -38,8 +38,8 @@ const Error = styled.span`
 `;
 
 interface FormRowProps {
-  label: string;
-  error: string;
+  label?: string;
+  error?: string;
   children: React.ReactNode;
 }
 

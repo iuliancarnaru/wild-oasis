@@ -63,13 +63,12 @@ function CreateCabinForm() {
 
   const onSubmit = (data: any) => mutate(data);
 
-  console.log(errors);
-
   return (
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     <Form onSubmit={handleSubmit(onSubmit)}>
       <FormRow label="Cabin name" error={errors.name?.message as string}>
         <Input
+          disabled={isCreating}
           type="number"
           id="name"
           {...register("name", {
@@ -82,6 +81,7 @@ function CreateCabinForm() {
         error={errors.max_capacity?.message as string}
       >
         <Input
+          disabled={isCreating}
           type="number"
           id="max_capacity"
           {...register("max_capacity", {
@@ -98,6 +98,7 @@ function CreateCabinForm() {
         error={errors.regular_price?.message as string}
       >
         <Input
+          disabled={isCreating}
           type="number"
           id="regular_price"
           {...register("regular_price", {
@@ -111,6 +112,7 @@ function CreateCabinForm() {
       </FormRow>
       <FormRow label="Discount" error={errors.discount?.message as string}>
         <Input
+          disabled={isCreating}
           type="number"
           id="discount"
           defaultValue={0}
@@ -128,13 +130,19 @@ function CreateCabinForm() {
         error={errors.description?.message as string}
       >
         <Textarea
+          disabled={isCreating}
           id="description"
           defaultValue=""
           {...register("description", { required: "This field is required" })}
         />
       </FormRow>
       <FormRow label="Cabin photo" error={errors.image?.message as string}>
-        <FileInput id="image" accept="image/*" {...register("image")} />
+        <FileInput
+          disabled={isCreating}
+          id="image"
+          accept="image/*"
+          {...register("image")}
+        />
       </FormRow>
 
       <FormRow>
