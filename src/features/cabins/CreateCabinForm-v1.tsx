@@ -8,7 +8,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createCabin } from "../../services/apiCabins";
 import { toast } from "react-hot-toast";
 import FormRow from "../../ui/FormRow";
-import { CabinType } from "../../types/db.types";
 // import { yupResolver } from "@hookform/resolvers/yup";
 // import * as yup from "yup";
 
@@ -35,10 +34,7 @@ import { CabinType } from "../../types/db.types";
 //   })
 //   .required();
 
-function CreateCabinForm({ cabinToEdit = {} }: CabinType) {
-  const { id: editId, ...editValues } = cabinToEdit;
-  const isEditSession = !!editId;
-
+function CreateCabinForm() {
   const queryClient = useQueryClient();
   const {
     register,
@@ -48,7 +44,6 @@ function CreateCabinForm({ cabinToEdit = {} }: CabinType) {
     getValues,
   } = useForm({
     // resolver: yupResolver(schema),
-    defaultValues: isEditSession ? editValues : {},
   });
 
   const { isLoading: isCreating, mutate } = useMutation({
@@ -150,9 +145,7 @@ function CreateCabinForm({ cabinToEdit = {} }: CabinType) {
           disabled={isCreating}
           id="image"
           accept="image/*"
-          {...register("image", {
-            required: isEditSession ? false : "This filed is required",
-          })}
+          {...register("image")}
         />
       </FormRow>
 
@@ -162,7 +155,7 @@ function CreateCabinForm({ cabinToEdit = {} }: CabinType) {
           Cancel
         </Button>
         <Button size="medium" variation="primary" disabled={isCreating}>
-          {isEditSession ? "Update cabin" : "Add cabin"}
+          Add cabin
         </Button>
       </FormRow>
     </Form>
