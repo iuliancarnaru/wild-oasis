@@ -62,6 +62,7 @@ function CabinRow({ cabin }: { cabin: CabinType }) {
           <span>&mdash;</span>
         )}
         <div>
+          <button>Duplicate</button>
           <button onClick={() => setShowFrom((showForm) => !showForm)}>
             Edit
           </button>
