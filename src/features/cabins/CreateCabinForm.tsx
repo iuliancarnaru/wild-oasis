@@ -5,7 +5,7 @@ import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createCabin } from "../../services/apiCabins";
+import { createOrEditCabin } from "../../services/apiCabins";
 import { toast } from "react-hot-toast";
 import FormRow from "../../ui/FormRow";
 import { CabinType } from "../../types/db.types";
@@ -51,8 +51,8 @@ function CreateCabinForm({ cabinToEdit = {} }: CabinType) {
     defaultValues: isEditSession ? editValues : {},
   });
 
-  const { isLoading: isCreating, mutate } = useMutation({
-    mutationFn: createCabin,
+  const { isLoading: isCreating, mutate: createCabin } = useMutation({
+    mutationFn: createOrEditCabin,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ["cabins"],
@@ -66,9 +66,31 @@ function CreateCabinForm({ cabinToEdit = {} }: CabinType) {
     },
   });
 
+  const { isLoading: isEditing, mutate: editCabin } = useMutation({
+    mutationFn: ({ newCabinData, id }) => createOrEditCabin(newCabinData, id),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["cabins"],
+      });
+      toast.success("Cabin successfully edited");
+      reset();
+    },
+    onError: (err) => {
+      toast.error((err as Error).message);
+      console.error((err as Error).message);
+    },
+  });
+
+  const isLoading = isCreating || isEditing;
+
   const onSubmit = (data: any) => {
+    const image = typeof data.image === "string" ? data.image : data.image[0];
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    mutate({ ...data, image: data.image[0] });
+    if (isEditSession) {
+      editCabin({ newCabinData: { ...data, image }, id: editId });
+    } else {
+      createCabin({ ...data, image: image });
+    }
   };
 
   return (
@@ -76,7 +98,7 @@ function CreateCabinForm({ cabinToEdit = {} }: CabinType) {
     <Form onSubmit={handleSubmit(onSubmit)}>
       <FormRow label="Cabin name" error={errors.name?.message as string}>
         <Input
-          disabled={isCreating}
+          disabled={isLoading}
           type="number"
           id="name"
           {...register("name", {
@@ -89,7 +111,7 @@ function CreateCabinForm({ cabinToEdit = {} }: CabinType) {
         error={errors.max_capacity?.message as string}
       >
         <Input
-          disabled={isCreating}
+          disabled={isLoading}
           type="number"
           id="max_capacity"
           {...register("max_capacity", {
@@ -106,7 +128,7 @@ function CreateCabinForm({ cabinToEdit = {} }: CabinType) {
         error={errors.regular_price?.message as string}
       >
         <Input
-          disabled={isCreating}
+          disabled={isLoading}
           type="number"
           id="regular_price"
           {...register("regular_price", {
@@ -120,7 +142,7 @@ function CreateCabinForm({ cabinToEdit = {} }: CabinType) {
       </FormRow>
       <FormRow label="Discount" error={errors.discount?.message as string}>
         <Input
-          disabled={isCreating}
+          disabled={isLoading}
           type="number"
           id="discount"
           defaultValue={0}
@@ -138,7 +160,7 @@ function CreateCabinForm({ cabinToEdit = {} }: CabinType) {
         error={errors.description?.message as string}
       >
         <Textarea
-          disabled={isCreating}
+          disabled={isLoading}
           id="description"
           defaultValue=""
           {...register("description", { required: "This field is required" })}
@@ -147,7 +169,7 @@ function CreateCabinForm({ cabinToEdit = {} }: CabinType) {
       <FormRow label="Cabin photo" error={errors.image?.message as string}>
         <FileInput
           type="file"
-          disabled={isCreating}
+          disabled={isLoading}
           id="image"
           accept="image/*"
           {...register("image", {
@@ -161,7 +183,7 @@ function CreateCabinForm({ cabinToEdit = {} }: CabinType) {
         <Button size="medium" variation="secondary" type="reset">
           Cancel
         </Button>
-        <Button size="medium" variation="primary" disabled={isCreating}>
+        <Button size="medium" variation="primary" disabled={isLoading}>
           {isEditSession ? "Update cabin" : "Add cabin"}
         </Button>
       </FormRow>
