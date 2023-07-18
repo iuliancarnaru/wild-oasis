@@ -16,12 +16,12 @@ const headingType = {
 };
 
 type HeadingProps = {
-  type: keyof typeof headingType;
+  type?: keyof typeof headingType;
 };
 
 const Heading = styled.h1<HeadingProps>`
   line-height: 1.4;
-  ${({ type }) => headingType[type]}
+  ${({ type = "h1" }) => headingType[type]}
 `;
 
 export default Heading;

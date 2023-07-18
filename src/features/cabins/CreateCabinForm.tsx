@@ -41,7 +41,7 @@ function CreateCabinForm({
   cabinToEdit?: CabinType;
   onCloseModal?: () => void;
 }) {
-  const { id: editId, ...editValues } = cabinToEdit || {};
+  const { id: editId, ...editValues } = cabinToEdit || ({} as CabinType);
   const isEditSession = !!editId;
 
   const { isCreating, createCabin } = useCreateCabin();
@@ -84,7 +84,6 @@ function CreateCabinForm({
   };
 
   return (
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     <Form
       onSubmit={handleSubmit(onSubmit)}
       type={onCloseModal ? "modal" : "regular"}
@@ -143,7 +142,7 @@ function CreateCabinForm({
             required: "This field is required",
             // custom validation
             validate: (value) =>
-              value <= getValues().regular_price ||
+              (value && value <= getValues().regular_price!) ||
               "Discount should be less than price",
           })}
         />
@@ -181,7 +180,7 @@ function CreateCabinForm({
         >
           Cancel
         </Button>
-        <Button size="medium" variation="primary" disabled={isLoading}>
+        <Button disabled={isLoading}>
           {isEditSession ? "Update cabin" : "Add cabin"}
         </Button>
       </FormRow>

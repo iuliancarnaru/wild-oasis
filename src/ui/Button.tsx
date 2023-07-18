@@ -49,8 +49,8 @@ const variations = {
 };
 
 type ButtonProps = {
-  size: keyof typeof sizes;
-  variation: keyof typeof variations;
+  size?: keyof typeof sizes;
+  variation?: keyof typeof variations;
 };
 
 const Button = styled.button<ButtonProps>`
@@ -58,13 +58,8 @@ const Button = styled.button<ButtonProps>`
   border-radius: var(--border-radius-sm);
   box-shadow: var(--shadow-sm);
 
-  ${({ size }) => sizes[size]}
-  ${({ variation }) => variations[variation]}
+  ${({ size = "medium" }) => sizes[size]}
+  ${({ variation = "primary" }) => variations[variation]}
 `;
-
-Button.defaultProps = {
-  size: "medium",
-  variation: "primary",
-};
 
 export default Button;

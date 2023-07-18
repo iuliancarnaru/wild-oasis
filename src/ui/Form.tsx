@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
 const Form = styled.form<{
-  type: string;
+  type?: string;
 }>`
   ${({ type }) =>
     type === "regular" &&
