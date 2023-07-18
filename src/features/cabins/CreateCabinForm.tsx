@@ -34,8 +34,14 @@ import { useEditCabin } from "./useEditCabin";
 //   })
 //   .required();
 
-function CreateCabinForm({ cabinToEdit = {} }: CabinType) {
-  const { id: editId, ...editValues } = cabinToEdit;
+function CreateCabinForm({
+  cabinToEdit,
+  onCloseModal,
+}: {
+  cabinToEdit?: CabinType;
+  onCloseModal?: () => void;
+}) {
+  const { id: editId, ...editValues } = cabinToEdit || {};
   const isEditSession = !!editId;
 
   const { isCreating, createCabin } = useCreateCabin();
@@ -54,16 +60,24 @@ function CreateCabinForm({ cabinToEdit = {} }: CabinType) {
 
   const isLoading = isCreating || isEditing;
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: CabinType) => {
     const image = typeof data.image === "string" ? data.image : data.image[0];
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     if (isEditSession) {
-      editCabin({ newCabinData: { ...data, image }, id: editId });
+      editCabin(
+        { newCabinData: { ...data, image }, id: editId },
+        {
+          onSuccess: () => onCloseModal?.(),
+        }
+      );
     } else {
       createCabin(
         { ...data, image: image },
         {
-          onSuccess: () => reset(),
+          onSuccess: () => {
+            reset();
+            onCloseModal?.();
+          },
         }
       );
     }
@@ -71,7 +85,10 @@ function CreateCabinForm({ cabinToEdit = {} }: CabinType) {
 
   return (
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form
+      onSubmit={handleSubmit(onSubmit)}
+      type={onCloseModal ? "modal" : "regular"}
+    >
       <FormRow label="Cabin name" error={errors.name?.message as string}>
         <Input
           disabled={isLoading}
@@ -156,7 +173,12 @@ function CreateCabinForm({ cabinToEdit = {} }: CabinType) {
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button size="medium" variation="secondary" type="reset">
+        <Button
+          size="medium"
+          variation="secondary"
+          type="reset"
+          onClick={() => onCloseModal?.()}
+        >
           Cancel
         </Button>
         <Button size="medium" variation="primary" disabled={isLoading}>
