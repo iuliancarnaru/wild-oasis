@@ -7,6 +7,8 @@ import Modal from "../../ui/Modal";
 import Button from "../../ui/Button";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import Table from "../../ui/Table";
+import Menus from "../../ui/Menus";
+import { HiPencil, HiSquare2Stack, HiTrash } from "react-icons/hi2";
 
 const Img = styled.img`
   display: block;
@@ -50,26 +52,25 @@ function CabinRow({ cabin }: { cabin: CabinType }) {
       ) : (
         <span>&mdash;</span>
       )}
+
       <Modal>
-        <Modal.Open opens="edit">
-          <Button size="medium" variation="secondary">
-            Edit
-          </Button>
-        </Modal.Open>
+        <Menus.Menu>
+          <Menus.Toggle id={`${id}`} />
+
+          <Menus.List id={`${id}`}>
+            <Modal.Open opens="edit">
+              <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
+            </Modal.Open>
+            <Modal.Open opens="delete">
+              <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
+            </Modal.Open>
+          </Menus.List>
+        </Menus.Menu>
+
         <Modal.Window name="edit">
           <CreateCabinForm cabinToEdit={cabin} />
         </Modal.Window>
 
-        <Modal.Open opens="delete">
-          <Button
-            size="medium"
-            variation="secondary"
-            onClick={() => deleteCabin(id)}
-            disabled={isDeleting}
-          >
-            Delete
-          </Button>
-        </Modal.Open>
         <Modal.Window name="delete">
           <ConfirmDelete
             resourceName="cabins"
