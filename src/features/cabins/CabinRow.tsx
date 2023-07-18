@@ -4,11 +4,10 @@ import { formatCurrency } from "../../utils/helpers";
 import CreateCabinForm from "./CreateCabinForm";
 import { useDeleteCabin } from "./useDeleteCabin";
 import Modal from "../../ui/Modal";
-import Button from "../../ui/Button";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import Table from "../../ui/Table";
 import Menus from "../../ui/Menus";
-import { HiPencil, HiSquare2Stack, HiTrash } from "react-icons/hi2";
+import { HiPencil, HiTrash } from "react-icons/hi2";
 
 const Img = styled.img`
   display: block;

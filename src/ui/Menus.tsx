@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { IconType } from "react-icons";
 import { HiEllipsisVertical } from "react-icons/hi2";
 import styled from "styled-components";
 import useOutsideClick from "../hooks/useOutsideClick";
