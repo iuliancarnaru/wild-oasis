@@ -182,4 +182,9 @@ export interface Database {
   };
 }
 
+// type WithoutNullableKeys<Type> = {
+//   [Key in keyof Type]-?: WithoutNullableKeys<NonNullable<Type[Key]>>;
+// };
+
 export type CabinType = Database["public"]["Tables"]["cabins"]["Row"];
+export type BookingType = Database["public"]["Tables"]["bookings"]["Row"];

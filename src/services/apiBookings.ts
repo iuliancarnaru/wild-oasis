@@ -1,6 +1,42 @@
 import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
 
+export async function getBookings({
+  filter,
+  sortBy,
+}: {
+  filter: { field: string; value: string; method: string } | null;
+  sortBy: { field: string; direction: string };
+}) {
+  let query = supabase
+    .from("bookings")
+    .select("*, cabins(name), guests(full_name, email)"); // reference ke
+
+  // FILTER
+  if (filter) {
+    query = query[filter.method || "eq"](filter.field, filter.value);
+    // you can add multiple filters by passing and array of filters and loop trough
+  }
+
+  console.log(sortBy);
+
+  // SORT
+  if (sortBy) {
+    query = query.order(sortBy.field, {
+      ascending: sortBy.direction === "asc",
+    });
+  }
+
+  const { data, error } = await query;
+
+  if (error) {
+    console.error(error);
+    throw new Error("Bookings could not be loaded");
+  }
+
+  return data;
+}
+
 export async function getBooking(id: string) {
   const { data, error } = await supabase
     .from("bookings")
@@ -20,7 +56,7 @@ export async function getBooking(id: string) {
 export async function getBookingsAfterDate(date: string) {
   const { data, error } = await supabase
     .from("bookings")
-    .select("created_at, totalPrice, extrasPrice")
+    .select("created_at, total_price, extras_price")
     .gte("created_at", date)
     .lte("created_at", getToday({ end: true }));
 
@@ -37,7 +73,7 @@ export async function getStaysAfterDate(date: string) {
   const { data, error } = await supabase
     .from("bookings")
     // .select('*')
-    .select("*, guests(fullName)")
+    .select("*, guests(full_name)")
     .gte("startDate", date)
     .lte("startDate", getToday());
 
@@ -53,7 +89,7 @@ export async function getStaysAfterDate(date: string) {
 export async function getStaysTodayActivity() {
   const { data, error } = await supabase
     .from("bookings")
-    .select("*, guests(fullName, nationality, countryFlag)")
+    .select("*, guests(full_name, nationality, country_flag)")
     .or(
       `and(status.eq.unconfirmed,startDate.eq.${getToday()}),and(status.eq.checked-in,endDate.eq.${getToday()})`
     )
