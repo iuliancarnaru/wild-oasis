@@ -25,11 +25,11 @@ function CheckinBooking() {
   const {
     id: bookingId,
     guests,
-    totalPrice,
-    numGuests,
-    hasBreakfast,
-    numNights,
-  } = booking;
+    total_price,
+    num_guests,
+    has_breakfast,
+    num_nights,
+  } = booking || {};
 
   function handleCheckin() {}
 
