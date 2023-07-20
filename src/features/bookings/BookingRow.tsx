@@ -80,7 +80,7 @@ function BookingRow({
   booking: Booking;
 }) {
   const navigate = useNavigate();
-  const { checkout, isCheckingOut } = useCheckout();
+  const { checkout } = useCheckout();
   const { deleteBooking, isDeleting } = useDeleteBooking();
 
   const statusToTagName = {

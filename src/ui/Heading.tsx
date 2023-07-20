@@ -13,6 +13,11 @@ const headingType = {
     font-size: 2rem;
     font-weight: 500;
   `,
+  h4: css`
+    font-size: 2rem;
+    font-weight: 600;
+    text-align: center;
+  `,
 };
 
 type HeadingProps = {

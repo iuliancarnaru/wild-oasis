@@ -15,7 +15,6 @@ import { useEffect, useState } from "react";
 import { formatCurrency } from "../../utils/helpers";
 import { useCheckin } from "./useCheckin";
 import { useSettings } from "../settings/useSettings";
-import { useCheckout } from "./useCheckout";
 
 const Box = styled.div`
   /* Box */
@@ -50,7 +49,7 @@ function CheckinBooking() {
     setConfirmPaid(booking?.is_paid ?? false);
   }, [booking?.is_paid]);
 
-  if (isLoading || isSettingsLoading || isCheckingOut) return <Spinner />;
+  if (isLoading || isSettingsLoading || isCheckingIn) return <Spinner />;
 
   function handleCheckin() {
     if (!confirmPaid) return;
