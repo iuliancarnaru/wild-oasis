@@ -49,6 +49,10 @@ function Filter({
 
   function handleClick(value: string) {
     searchParams.set(filteredField, value);
+    // reset page number when changing the filter
+    if (searchParams.get("page")) {
+      searchParams.set("page", "1");
+    }
     setSearchParams(searchParams);
   }
 
