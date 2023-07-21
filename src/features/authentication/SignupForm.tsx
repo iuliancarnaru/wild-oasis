@@ -4,7 +4,6 @@ import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 import { useSignup } from "./useSignup";
-import Spinner from "../../ui/Spinner";
 
 // Email regex: /\S+@\S+\.\S+/
 
@@ -92,7 +91,12 @@ function SignupForm() {
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button variation="secondary" type="reset" disabled={isSigningUp}>
+        <Button
+          variation="secondary"
+          type="reset"
+          disabled={isSigningUp}
+          onClick={reset}
+        >
           Cancel
         </Button>
         <Button>Create new user</Button>
