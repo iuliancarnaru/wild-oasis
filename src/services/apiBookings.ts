@@ -85,8 +85,8 @@ export async function getStaysAfterDate(date: string) {
     .from("bookings")
     // .select('*')
     .select("*, guests(full_name)")
-    .gte("startDate", date)
-    .lte("startDate", getToday());
+    .gte("start_date", date)
+    .lte("start_date", getToday());
 
   if (error) {
     console.error(error);
