@@ -148,8 +148,6 @@ function DurationChart({ confirmedStays }) {
   const startData = isDarkMode ? startDataDark : startDataLight;
   const data = prepareData(startData, confirmedStays);
 
-  console.log(data);
-
   return (
     <ChartBox>
       <Heading type="h2" as="h2">
