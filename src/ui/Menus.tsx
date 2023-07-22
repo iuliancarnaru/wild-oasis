@@ -107,6 +107,7 @@ function Toggle({ id }: { id: string }) {
   const { openId, close, open, setPosition } = useContext(MenusContext);
 
   function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
+    event.stopPropagation();
     const target = event.target as HTMLElement;
     const rect = target.closest("button")?.getBoundingClientRect();
 
@@ -130,7 +131,7 @@ function Toggle({ id }: { id: string }) {
 function List({ id, children }: { id: string; children: React.ReactNode }) {
   const { openId, close, position } = useContext(MenusContext);
   const listRef = useRef<HTMLUListElement>(null);
-  useOutsideClick(listRef, close);
+  useOutsideClick(listRef, close, false);
 
   if (openId !== id) return null;
 
